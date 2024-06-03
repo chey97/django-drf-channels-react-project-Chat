@@ -1,4 +1,4 @@
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Server
@@ -16,6 +16,9 @@ class ServerListViewSet(viewsets.ViewSet):
         qty = request.query_params.get("qty")
         by_user = request.query_params.get("by_user")
         by_serverid = request.query_params.get("by_serverid")
+
+        if (by_user or by_serverid) and not request.user.is_authenticated:
+            raise AuthenticationFailed()
 
         if category:
             queryset = queryset.filter(category__name=category)
