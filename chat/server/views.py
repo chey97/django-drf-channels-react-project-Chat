@@ -9,14 +9,18 @@ class ServerListViewSet(viewsets.ViewSet):
     queryset = Server.objects.all()
 
     def list(self, request):
-        # Start with all Server objects
         queryset = Server.objects.all()
 
         category = request.query_params.get("category")
         qty = request.query_params.get("qty")
+        by_user = request.query_params.get("by_user")
 
         if category:
             queryset = queryset.filter(category__name=category)
+            
+        if by_user:
+            user_id = request.user.id
+            queryset = queryset.filter(member=user_id)
 
         if qty:
             queryset = queryset[: int(qty)]
