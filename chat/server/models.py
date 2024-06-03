@@ -21,7 +21,9 @@ class Server(models.Model):
         Category, on_delete=models.CASCADE, related_name="server_category"
     )
     description = models.CharField(max_length=250, blank=True, null=True)
-    member = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="server_members"
+    )
 
     def __str__(self):
         return self.name
