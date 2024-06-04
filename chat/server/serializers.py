@@ -22,4 +22,8 @@ class ServerSerializer(serializers.ModelSerializer):
         return None
     
     def to_representation(self, instance):
-        return super().to_representation(instance)
+        data = super().to_representation(instance)
+        num_members = self.context.get("num_members")
+        if not num_members:
+            data.pop("num_members", None)
+        return data
