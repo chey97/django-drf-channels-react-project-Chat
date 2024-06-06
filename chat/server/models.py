@@ -8,11 +8,14 @@ from django.db.models.signals import pre_delete
 
 # Create your models here.
 
+
 def server_icon_upload_path(instance, filename):
-    return f"server/{instance.id}/server_icon/{filename}"
+    return f"server/{instance.uuid}/server_icon/{filename}"
+
 
 def server_banner_upload_path(instance, filename):
-    return f"server/{instance.id}/server_banner/{filename}"
+    return f"server/{instance.uuid}/server_banner/{filename}"
+
 
 def category_icon_upload_path(instance, filename):
     return f"category/{instance.uuid}/category_icon/{filename}"
@@ -57,16 +60,23 @@ class Server(models.Model):
 
 
 class Channel(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="channel_owner")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="channel_owner"
+    )
     topic = models.CharField(max_length=250)
-    server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name="channel_server")
-    banner = models.ImageField(upload_to=server_banner_upload_path, blank=True, null=True)
+    server = models.ForeignKey(
+        Server, on_delete=models.CASCADE, related_name="channel_server"
+    )
+    banner = models.ImageField(
+        upload_to=server_banner_upload_path, blank=True, null=True
+    )
     icon = models.ImageField(upload_to=server_icon_upload_path, blank=True, null=True)
-    
+
     def save(self, *args, **kwargs):
         if self.id:
-            existing = Channel.objects.filter(id=self.id).first()
+            existing = Channel.objects.filter(uuid=self.uuid).first()
             if existing and existing.icon != self.icon:
                 existing.icon.delete(save=False)
             if existing and existing.banner != self.banner:
