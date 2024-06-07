@@ -4,6 +4,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.dispatch import receiver
 from django.db.models.signals import pre_delete
+from .validators import validate_icon_image_size, validate_image_file_extension
 
 
 # Create your models here.
@@ -70,9 +71,17 @@ class Channel(models.Model):
         Server, on_delete=models.CASCADE, related_name="channel_server"
     )
     banner = models.ImageField(
-        upload_to=server_banner_upload_path, blank=True, null=True
+        upload_to=server_banner_upload_path,
+        blank=True,
+        null=True,
+        validators=[validate_image_file_extension],
     )
-    icon = models.ImageField(upload_to=server_icon_upload_path, blank=True, null=True)
+    icon = models.ImageField(
+        upload_to=server_icon_upload_path,
+        blank=True,
+        null=True,
+        validators=[validate_icon_image_size, validate_image_file_extension],
+    )
 
     def save(self, *args, **kwargs):
         if self.id:
