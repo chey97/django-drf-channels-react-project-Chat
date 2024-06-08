@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const PrimaryAppBar = () => {
   const [sideMenu, setSideMenu] = useState(false);
