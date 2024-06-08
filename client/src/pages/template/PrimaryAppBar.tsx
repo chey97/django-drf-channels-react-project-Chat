@@ -16,25 +16,17 @@ const PrimaryAppBar = () => {
   const [sideMenu, setSideMenu] = useState(false);
   const theme = useTheme();
 
-  const isSmallScreen = useMediaQuery(theme.breakpoints.up("sm"))
+  const isSmallScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
-  useEffect (() => {
+  useEffect(() => {
     if (isSmallScreen && sideMenu) {
-      setSideMenu(false)
+      setSideMenu(false);
     }
-  }, [isSmallScreen])
+  }, [isSmallScreen]);
 
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-      setSideMenu(open);
-    };
+  const toggleDrawer = (open: boolean) => () => {
+    setSideMenu(open);
+  };
 
   return (
     <AppBar
