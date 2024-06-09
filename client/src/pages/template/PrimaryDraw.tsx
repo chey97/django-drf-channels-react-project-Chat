@@ -82,6 +82,7 @@ const PriamryDraw = () => {
             handleDrawerOpen={handleDrawerOpen}
             handleDrawerClose={handleDrawerClosed}
           />
+          {/* array for testing */}
           {[...Array(100)].map((_, i) => (
             <Typography key={i} paragraph>
               {i + 1}
