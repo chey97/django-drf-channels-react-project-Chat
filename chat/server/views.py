@@ -5,11 +5,13 @@ from .models import Server
 from .serializers import ServerSerializer
 from rest_framework.response import Response
 from django.db.models import Count
+from rest_framework.permissions import IsAuthenticated
 from .schema import server_list_docs
 
 
 class ServerListViewSet(viewsets.ViewSet):
     queryset = Server.objects.all()
+    permission_classes = [IsAuthenticated]
 
     @server_list_docs
     def list(self, request):
@@ -58,7 +60,7 @@ class ServerListViewSet(viewsets.ViewSet):
         if by_serverid:
             if not request.user.is_authenticated:
                 raise AuthenticationFailed()
-            
+
             try:
                 queryset = queryset.filter(id=by_serverid)
                 if not queryset.exists():
@@ -67,7 +69,7 @@ class ServerListViewSet(viewsets.ViewSet):
                     )
             except ValueError:
                 raise ValidationError(detail=f"Server id {by_serverid} is not valid")
-            
+
         if qty:
             queryset = queryset[: int(qty)]
 
