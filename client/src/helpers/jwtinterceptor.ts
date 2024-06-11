@@ -13,7 +13,15 @@ const useAxiosWIthInterceptor = (): AxiosInstance => {
     jwtAxios.interceptors.response.use(
         (response) => {
             return response
+        },
+    async (error) => {
+        const originalRequest = error.config;
+        if (error.response?.status === 403) {
+            const goRoot = () => navigate("/test")
+            goRoot();
         }
+        throw error;
+    }
     )
     return jwtAxios
 
