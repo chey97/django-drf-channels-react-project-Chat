@@ -46,6 +46,7 @@ class Category(models.Model):
 
 
 class Server(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="server_owner"
@@ -55,21 +56,6 @@ class Server(models.Model):
     )
     description = models.CharField(max_length=250, blank=True, null=True)
     member = models.ManyToManyField(settings.AUTH_USER_MODEL)
-
-    def __str__(self):
-        return self.name
-
-
-class Channel(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    name = models.CharField(max_length=100)
-    owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="channel_owner"
-    )
-    topic = models.CharField(max_length=250)
-    server = models.ForeignKey(
-        Server, on_delete=models.CASCADE, related_name="channel_server"
-    )
     banner = models.ImageField(
         upload_to=server_banner_upload_path,
         blank=True,
@@ -85,22 +71,37 @@ class Channel(models.Model):
 
     def save(self, *args, **kwargs):
         if self.id:
-            existing = Channel.objects.filter(uuid=self.uuid).first()
+            existing = Server.objects.filter(uuid=self.uuid).first()
             if existing and existing.icon != self.icon:
                 existing.icon.delete(save=False)
             if existing and existing.banner != self.banner:
                 existing.banner.delete(save=False)
-        super(Category, self).save(*args, **kwargs)
+        super(Server, self).save(*args, **kwargs)
 
     @receiver(models.signals.pre_delete, sender="server.Server")
-    def category_delete_files(sender, instance, **kwargs):
+    def server_delete_files(sender, instance, **kwargs):
         for field in instance._meta.fields:
             if field.name == "icon" or field.name == "banner":
                 instance.icon.delete(save=False)
 
-    def save(self, *args, **kwargs):
-        self.name = self.name.lower()
-        super(Channel, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.name = self.name.lower()
+    #     super(Server, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class Channel(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(max_length=100)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="channel_owner"
+    )
+    topic = models.CharField(max_length=250)
+    server = models.ForeignKey(
+        Server, on_delete=models.CASCADE, related_name="channel_server"
+    )
 
     def __str__(self):
         return self.name
