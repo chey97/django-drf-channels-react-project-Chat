@@ -3,6 +3,7 @@ import PrimaryAppBar from "./template/PrimaryAppBar";
 import PriamryDraw from "./template/PrimaryDraw";
 import SecondaryDraw from "./template/SecondaryDraw";
 import Main from "./template/Main";
+import PopularChannels from "../components/PrimaryDraw/PopularChannels";
 
 
 
@@ -12,7 +13,9 @@ const Home = () => {
             <Box sx={{display: "flex" }}>
                 <CssBaseline />
                 <PrimaryAppBar />
-                <PriamryDraw />
+                <PriamryDraw>
+                    <PopularChannels />
+                </PriamryDraw>
                 <SecondaryDraw />
                 <Main />
             </Box>
