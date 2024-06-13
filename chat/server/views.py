@@ -1,17 +1,26 @@
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Server
-from .serializers import ServerSerializer
+from .models import Server, Category
+from .serializers import ServerSerializer, CategorySerializer
 from rest_framework.response import Response
 from django.db.models import Count
 from rest_framework.permissions import IsAuthenticated
 from .schema import server_list_docs
+from drf_spectacular.utils import extend_schema
 
-
+class CategoryListViewSet(viewsets.ViewSet):
+    queryset = Category.objects.all()
+    
+    @extend_schema(responses=CategorySerializer)
+    def list(self, request):
+        serializer = CategorySerializer(self.queryset, many=True)
+        return Response(serializer.data)
+    
+    
 class ServerListViewSet(viewsets.ViewSet):
     queryset = Server.objects.all()
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     @server_list_docs
     def list(self, request):
@@ -77,3 +86,5 @@ class ServerListViewSet(viewsets.ViewSet):
             queryset, many=True, context={"num_members": with_num_members}
         )
         return Response(serializer.data)
+
+
