@@ -4,7 +4,21 @@ from django.contrib import admin
 
 from .models import Channel, Category, Server
 
-admin.site.register(Channel)
+
+class ChannelAdmin(admin.ModelAdmin):
+    list_display = ("name", "owner", "server")
+
+    class Meta:
+        model = Channel
+
+
+class ServerAdmin(admin.ModelAdmin):
+    list_display = ("name", "owner", "category", "description")
+
+    class Meta:
+        model = Server
+
+
+admin.site.register(Channel, ChannelAdmin)
 admin.site.register(Category)
-admin.site.register(Server)
- 
+admin.site.register(Server, ServerAdmin)
