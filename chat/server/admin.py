@@ -12,6 +12,14 @@ class ChannelAdmin(admin.ModelAdmin):
         model = Channel
 
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "description")
+    search_fields = ("name", "description")
+
+    class Meta:
+        model = Category
+
+
 class ServerAdmin(admin.ModelAdmin):
     list_display = ("name", "owner", "category", "description")
 
@@ -20,5 +28,5 @@ class ServerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Channel, ChannelAdmin)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Server, ServerAdmin)
