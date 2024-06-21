@@ -84,7 +84,7 @@ API documentation is available at `/api/docs/` once the Django server is running
 ### Start the Backend Server
 
 ```bash
-    cd backend
+    cd chat
     python manage.py runserver
 ```
 
@@ -92,7 +92,7 @@ API documentation is available at `/api/docs/` once the Django server is running
 In a new terminal, run:
 
 ```bash
-    cd frontend
+    cd client
     npm start
     # or
     yarn start
