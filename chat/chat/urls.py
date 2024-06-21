@@ -5,7 +5,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 from rest_framework.routers import DefaultRouter
-from server.views import ServerListViewSet, CategoryListViewSet
+from server.views import ServerListViewSet, CategoryListViewSet, ChannelListViewSet
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -13,6 +13,7 @@ from django.conf.urls.static import static
 router = DefaultRouter()
 router.register("api/server/select", ServerListViewSet)
 router.register("api/server/category", CategoryListViewSet)
+router.register("api/server/channel", ChannelListViewSet)
 
 
 urlpatterns = [

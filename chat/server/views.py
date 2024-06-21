@@ -1,14 +1,24 @@
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Server, Category
-from .serializers import ServerSerializer, CategorySerializer
+from .models import Server, Category, Channel
+from .serializers import ServerSerializer, CategorySerializer, ChannelSerializer
 from rest_framework.response import Response
 from django.db.models import Count
 from rest_framework.permissions import IsAuthenticated
 from .schema import server_list_docs
 from drf_spectacular.utils import extend_schema
 
+
+class ChannelListViewSet(viewsets.ViewSet):
+    queryset = Channel.objects.all()
+    
+    @extend_schema(responses=ChannelSerializer)
+    def list(self, request):
+        serializer = ChannelSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+    
+    
 class CategoryListViewSet(viewsets.ViewSet):
     queryset = Category.objects.all()
     
