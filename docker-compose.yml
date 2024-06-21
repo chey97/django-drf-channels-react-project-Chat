@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: ./chat
+    volumes:
+      - ./chat:/app
+      - ./chat/db.sqlite3:/app/db.sqlite3  # Persist the SQLite database
+    ports:
+      - "8000:8000"
+
+  react:
+    build:
+      context: ./client
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - django
