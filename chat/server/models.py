@@ -10,6 +10,8 @@ from .validators import validate_icon_image_size, validate_image_file_extension
 # Create your models here.
 
 
+#hello chethiya
+
 def server_icon_upload_path(instance, filename):
     return f"server/{instance.uuid}/server_icon/{filename}"
 
