@@ -10,9 +10,8 @@ from .validators import validate_icon_image_size, validate_image_file_extension
 # Create your models here.
 
 
-#hello chethiya
-
 def server_icon_upload_path(instance, filename):
+
     return f"server/{instance.uuid}/server_icon/{filename}"
 
 
@@ -31,6 +30,7 @@ class Category(models.Model):
     icon = models.FileField(upload_to=category_icon_upload_path, blank=True, null=True)
 
     def save(self, *args, **kwargs):
+
         if self.id:
             existing = Category.objects.filter(uuid=self.uuid).first()
             if existing and existing.icon != self.icon:
